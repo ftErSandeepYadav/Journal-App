@@ -61,20 +61,20 @@ public class JournalEntryControllerV2 {
 //        return  new ResponseEntity<>(HttpStatus.NO_CONTENT) ;
 //    }
 //
-//    @PutMapping("id/{id}")
-//    public ResponseEntity<JournalEntry> updateJournalById(@PathVariable ObjectId id, @RequestBody JournalEntry myEntry ){
-//        JournalEntry old = journalEntryService.getById(id).orElse(null);
-//        if(old != null ){
-//            old.setTitle(myEntry.getTitle()!=null && !myEntry.getTitle().equals("") ? myEntry.getTitle(): old.getTitle());
-//            old.setContent(myEntry.getContent()!=null && !myEntry.getContent().equals("") ? myEntry.getContent(): old.getContent());
-//            journalEntryService.saveEntry(old);
-//            return new ResponseEntity<>(old,HttpStatus.OK) ;
-//        }
-//        return new ResponseEntity<>(HttpStatus.NOT_FOUND) ;
-//    }
-    @DeleteMapping("id/{myId}")
-    public ResponseEntity<?> deleteJournalEntryById(@PathVariable ObjectId myId ){
-        journalEntryServiceThroughUser.deleteById(myId);
+    @PutMapping("id/{userName}/{id}")
+    public ResponseEntity<JournalEntry> updateJournalById(@PathVariable ObjectId id, @RequestBody JournalEntry myEntry, @PathVariable String userName ){
+        JournalEntry old = journalEntryServiceThroughUser.getById(id).orElse(null);
+        if(old != null ){
+            old.setTitle(myEntry.getTitle()!=null && !myEntry.getTitle().equals("") ? myEntry.getTitle(): old.getTitle());
+            old.setContent(myEntry.getContent()!=null && !myEntry.getContent().equals("") ? myEntry.getContent(): old.getContent());
+            journalEntryServiceThroughUser.saveEntry(old);
+            return new ResponseEntity<>(old,HttpStatus.OK) ;
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND) ;
+    }
+    @DeleteMapping("id/{userName}/{myId}")
+    public ResponseEntity<?> deleteJournalEntryById(@PathVariable ObjectId myId, @PathVariable String userName){
+        journalEntryServiceThroughUser.deleteById(myId, userName);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT) ;
     }
 }
